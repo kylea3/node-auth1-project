@@ -46,11 +46,12 @@ async function checkUsernameFree(req, res, next) {
   }
 */
 async function checkUsernameExists(req, res, next) {
-  let { username, password } = req.body;
+  let { username } = req.body;
 
   User.findBy({ username })
   .then(user => {
     if(user[0]) {
+      req.user = user[0];
       next()
     } else {
       next(res.status(401).json({ message: 'Invalid credentials'}))
