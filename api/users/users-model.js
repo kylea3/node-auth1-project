@@ -10,8 +10,13 @@ function find() {
   resolves to an ARRAY with all users that match the filter condition
  */
 function findBy(filter) {
-  // return db('users')
-  //   .where()
+  if(filter.username === 'username') { 
+  return db('users')
+    .where('username', filter.username)
+} else {
+  return db('users')
+    .where('password', filter.password)
+}
 
 }
 
@@ -29,8 +34,13 @@ async function findById(user_id) {
 async function add(user) {
   await db('users')
     .insert(user)
-  return await db('users')
+  const person = await db('users')
     .where('username', user.username)
+  const result = {
+    user_id: person[0].user_id,
+    username: person[0].username
+  }
+  return result
 }
 
 // Don't forget to add these to the `exports` object so they can be required in other modules
