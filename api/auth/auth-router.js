@@ -3,9 +3,10 @@
 const router = require('express').Router()
 const User = require('../users/users-model')
 const bcrypt = require('bcryptjs')
+const { restricted, checkUsernameExists, checkUsernameFree, checkPasswordLength } = require('./auth-middleware')
 
 
-router.post('/register', (req, res, next) => {
+router.post('/register', checkUsernameFree, (req, res, next) => {
   let user = req.body;
   const hash = bcrypt.hashSync(user.password, 12);
 
@@ -48,19 +49,14 @@ router.post('/register', (req, res, next) => {
   }
  */
 
-router.post('/login', (req, res, next) => {
-  let { username, password } = req.body;
-
-  User.findBy({ username })
-    .then(user => {
+router.post('/login', checkUsernameExists,  (req, res, next) => {
       if( user[0] && bcrypt.compareSync(password, user[0].password)) {
+        req.session.user = user;
         res.status(200).json({ message: `Welcome ${user[0].username}`})
         next()
       } else {
         next(res.status(401).json({ message: 'Invalid credentials'}))
       }
-    })
-    .catch(next)
 })
 /**
   2 [POST] /api/auth/login { "username": "sue", "password": "1234" }
