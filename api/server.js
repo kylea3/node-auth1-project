@@ -20,7 +20,7 @@ const session = require('express-session')
 const server = express();
 
 const sessionConfig = {
-  name: 'chocolate-chip',
+  name: 'chocolatechip',
   secret: 'keep it secret, keep it safe!',
   cookie: {
     maxAge: 1000 * 30,
