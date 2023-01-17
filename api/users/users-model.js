@@ -9,15 +9,8 @@ function find() {
 /**
   resolves to an ARRAY with all users that match the filter condition
  */
-function findBy(filter) {
-  if(filter.username === 'username') { 
-  return db('users')
-    .where('username', filter.username)
-} else {
-  return db('users')
-    .where('password', filter.password)
-}
-
+async function findBy(filter) {
+  return db('users').where(filter)
 }
 
 /**
